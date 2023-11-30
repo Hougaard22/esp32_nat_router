@@ -15,8 +15,6 @@
 #include <sys/param.h>
 //#include "nvs_flash.h"
 #include "esp_netif.h"
-//#include "esp_eth.h"
-//#include "protocol_examples_common.h"
 
 #include <esp_http_server.h>
 
@@ -43,6 +41,24 @@ esp_timer_create_args_t restart_timer_args = {
 /* An HTTP GET handler */
 static esp_err_t index_get_handler(httpd_req_t *req)
 {
+    // struct portmap_table_entry portmap = get_portmap_ref();
+
+    // esp_ip4_addr_t addr;
+    // for (int i = 0; i<sizeof(portmap); i++) {
+    //     ESP_LOGI(TAG,"%d", i);
+    //     if (portmap[i].valid) {
+    //         ESP_LOGI(TAG,"%s", portmap[i].proto == PROTO_TCP?"TCP ":"UDP ");
+            
+    //         addr.addr = my_ip;
+    //         ESP_LOGI(TAG, IPSTR":%lu -> ", IP2STR(&addr), portmap[i].mport);
+    //         ESP_LOGI(TAG,":%lu -> ", portmap[i].mport);
+    //         addr.addr = portmap[i].daddr;
+    //         ESP_LOGI(TAG,IPSTR":%lu\n", IP2STR(&addr), portmap[i].dport);
+    //         ESP_LOGI(TAG,":%lu\n", portmap[i].dport);
+    //     }
+    // }
+    // add_portmap(PROTO_TCP, 9090 + sizeof(portmap), addr.addr, 9090 + sizeof(portmap));
+
     char*  buf;
     size_t buf_len;
 
@@ -200,6 +216,7 @@ char* html_escape(const char* src) {
 
     return res;
 }
+
 
 httpd_handle_t start_webserver(void)
 {
