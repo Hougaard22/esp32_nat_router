@@ -505,9 +505,7 @@ static int show(int argc, char **argv)
     );
     printf("AP SSID: %s Password: %s\n", ap_ssid != NULL ? ap_ssid : "<undef>",
         ap_passwd != NULL ? ap_passwd : "<undef>");
-    ip4_addr_t addr;
-    addr.addr = my_ap_ip;
-    printf("AP IP address: " IPSTR "\n", IP2STR(&addr));
+    printf("AP IP address: " IPSTR "\n", IP2STR(&my_ap_ip));
 
     if (ssid != NULL) free(ssid);
     if (ent_username != NULL) free(ent_username);
@@ -521,8 +519,7 @@ static int show(int argc, char **argv)
 
     printf("Uplink AP %sconnected\n", ap_connect?"":"not ");
     if (ap_connect) {
-        addr.addr = my_ip;
-        printf ("IP: " IPSTR "\n", IP2STR(&addr));
+        printf ("IP: " IPSTR "\n", IP2STR(&my_ip));
     }
     printf("%d Stations connected\n", connect_count);
 

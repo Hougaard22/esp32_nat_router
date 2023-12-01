@@ -24,12 +24,13 @@ extern char* subnet_mask;
 extern char* gateway_addr;
 extern char* ap_ssid;
 extern char* ap_passwd;
+extern char* ap_ip;
 
 extern uint16_t connect_count;
 extern bool ap_connect;
 
-extern uint32_t my_ip;
-extern uint32_t my_ap_ip;
+extern esp_ip4_addr_t my_ip;
+extern esp_ip4_addr_t my_ap_ip;
 
 void preprocess_string(char* str);
 int set_sta(int argc, char **argv);

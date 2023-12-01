@@ -9,7 +9,6 @@ extern "C" {
 //extern struct portmap_table_entry portmap_tab[IP_PORTMAP_MAX];
 
 esp_err_t apply_portmap_tab();
-
 esp_err_t delete_portmap_tab();
 void print_portmap_tab();
 esp_err_t get_portmap_tab();

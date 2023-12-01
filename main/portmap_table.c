@@ -41,7 +41,7 @@ struct portmap_table_entry portmap_tab[IP_PORTMAP_MAX];
 esp_err_t apply_portmap_tab() {
     for (int i = 0; i<IP_PORTMAP_MAX; i++) {
         if (portmap_tab[i].valid) {
-            ip_portmap_add(portmap_tab[i].proto, my_ip, portmap_tab[i].mport, portmap_tab[i].daddr, portmap_tab[i].dport);
+            ip_portmap_add(portmap_tab[i].proto, my_ip.addr, portmap_tab[i].mport, portmap_tab[i].daddr, portmap_tab[i].dport);
         }
     }
     return ESP_OK;
@@ -60,9 +60,8 @@ void print_portmap_tab() {
     for (int i = 0; i<IP_PORTMAP_MAX; i++) {
         if (portmap_tab[i].valid) {
             printf ("%s", portmap_tab[i].proto == PROTO_TCP?"TCP ":"UDP ");
-            ip4_addr_t addr;
-            addr.addr = my_ip;
-            printf (IPSTR":%d -> ", IP2STR(&addr), portmap_tab[i].mport);
+            printf (IPSTR":%d -> ", IP2STR(&my_ip), portmap_tab[i].mport);
+            esp_ip4_addr_t addr;
             addr.addr = portmap_tab[i].daddr;
             printf (IPSTR":%d\n", IP2STR(&addr), portmap_tab[i].dport);
         }
@@ -119,7 +118,7 @@ esp_err_t add_portmap(u8_t proto, u16_t mport, u32_t daddr, u16_t dport) {
             }
             nvs_close(nvs);
 
-            ip_portmap_add(proto, my_ip, mport, daddr, dport);
+            ip_portmap_add(proto, my_ip.addr, mport, daddr, dport);
 
             return ESP_OK;
         }
