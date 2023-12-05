@@ -12,9 +12,6 @@
 #include "esp_console.h"
 #include "esp_system.h"
 #include "esp_sleep.h"
-#include "spi_flash_mmap.h"
-#include "driver/rtc_io.h"
-#include "driver/uart.h"
 #include "argtable3/argtable3.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -22,14 +19,9 @@
 #include "nvs.h"
 #include "esp_wifi.h"
 
-#include "lwip/ip4_addr.h"
-#if !IP_NAPT
-#error "IP_NAPT must be defined"
-#endif
-#include "lwip/lwip_napt.h"
-
 #include "router_globals.h"
 #include "cmd_router.h"
+//#include "portmap_table.h"
 
 #ifdef CONFIG_FREERTOS_USE_STATS_FORMATTING_FUNCTIONS
 #define WITH_TASKS_INFO 1
@@ -43,6 +35,7 @@ static void register_set_ap(void);
 static void register_set_ap_ip(void);
 static void register_show(void);
 static void register_portmap(void);
+static void register_show_connected_clients(void);
 
 void preprocess_string(char* str)
 {
@@ -146,6 +139,7 @@ void register_router(void)
     register_set_ap_ip();
     register_portmap();
     register_show();
+    register_show_connected_clients();
 }
 
 /** Arguments used by 'set_sta' function */
@@ -539,3 +533,43 @@ static void register_show(void)
     ESP_ERROR_CHECK( esp_console_cmd_register(&cmd) );
 }
 
+void get_connected_clients_list(wifi_sta_list_t stationList, esp_netif_pair_mac_ip_t* mac_ip_pair){
+    for(int i = 0; i < stationList.num; i++) {
+        wifi_sta_info_t station = stationList.sta[i];
+
+        for(int j = 0; j< 6; j++){
+            mac_ip_pair[i].mac[j] = station.mac[j];
+        }
+    }
+
+    esp_netif_dhcps_get_clients_by_mac(wifiAP, stationList.num, mac_ip_pair);
+}
+
+static int show_connected_clients(int argc, char **argv) {
+    /*Number of connected stations*/
+    wifi_sta_list_t stationList;    
+    esp_wifi_ap_get_sta_list(&stationList);  
+
+    esp_netif_pair_mac_ip_t* mac_ip_pair = malloc(sizeof(esp_netif_pair_mac_ip_t) * stationList.num);
+    get_connected_clients_list(stationList, mac_ip_pair);
+
+    printf("%d connected clients\n",stationList.num);
+
+    for(int i = 0; i < stationList.num; i++) {
+        printf("Client IP: " IPSTR "\n", IP2STR(&mac_ip_pair[i].ip));
+    }
+
+    free(mac_ip_pair);
+    return ESP_OK;
+}
+
+static void register_show_connected_clients(void)
+{
+    const esp_console_cmd_t cmd = {
+        .command = "show_clients",
+        .help = "List connected clients",
+        .hint = NULL,
+        .func = &show_connected_clients,
+    };
+    ESP_ERROR_CHECK( esp_console_cmd_register(&cmd) );
+}

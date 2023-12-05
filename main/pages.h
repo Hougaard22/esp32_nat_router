@@ -1,36 +1,26 @@
-#define CONFIG_PAGE "<html>\
-<head></head>\
-<meta name='viewport' content='width=device-width, initial-scale=1'>\
-<style>\
+#define CSS_PAGE "html * {\
+font-weight: 100;}\
 body {\
-font-family: apercu-pro, -apple-system, system-ui, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;\
-padding: 1em;\
+font-family: system-ui, sans-serif;\
+padding: 0em;\
+margin: 0;\
 line-height: 2em;\
-font-weight: 100;\
 }\
-\
 td {\
-font-weight: 100;\
 min-height: 24px;\
 }\
-\
-td:first-child { \
+td:first-child {\
 text-align: right;\
-min-width: 100px;\
+min-width: 130px;\
 padding-right: 10px;\
 }\
-\
 h1 {\
 font-size: 1.5em;\
-font-weight: 200;\
 }\
-\
 h2 {\
 font-size: 1.2em;\
-font-weight: 200;\
-margin-left: 5px;\
+padding-top: 5px;\
 }\
-\
 input {\
 border: 1px solid rgb(196, 196, 196);\
 color: rgb(76, 76, 76);\
@@ -40,29 +30,52 @@ height: 40px;\
 margin: 3px 0px;\
 padding: 0px 14px;\
 }\
-\
 input:focus {\
 border:1px solid black;\
 outline: none !important;\
 box-shadow: 0 0 10px #719ECE;\
 }\
-\
 #config {\
-width:400px; \
+width:400px;\
 margin:0 auto;\
 }\
-\
 .ok-button {\
 background-color: #0078e7;\
 color: #fff;\
 }\
-\
 .red-button {\
 background-color: #e72e00;\
 color: #fff;\
 }\
-</style>\
+*:disabled {\
+background-color: lightgray;\
+}\
+#topnav {\
+padding: 0 20 0 20;\
+background-color: #0078e7;\
+text-align: center;\
+padding: 5px;\
+}\
+.nav-link {\
+display: inline-block;\
+width: 100px;\
+color: White;\
+text-decoration: none;\
+}\
+"
+
+#define CONFIG_PAGE "<html>\
+<head>\
+<title>esp32_nat_router</title>\
+<link rel='stylesheet' type='text/css' href='css' />\
+<meta name='viewport' content='width=device-width, initial-scale=1'>\
+</head>\
 <body>\
+<nav id='topnav'>\
+<a class='nav-link' href='/'>CONFIG</a>\
+<a class='nav-link' href='/info'>STATUS</a>\
+<a class='nav-link' href='/portmapping'>PORTMAPPING</a>\
+</nav>\
 <div id='config'>\
 <h1>ESP32 NAT Router Config</h1>\
 <script>\
@@ -93,7 +106,6 @@ setTimeout(\"location.href = '/'\",10000);\
 <i>Password </i>less than 8 chars = open<br />\
 </small>\
 </form>\
-\
 <h2>STA Settings (uplink WiFi network)</h2>\
 <form action='' method='GET'>\
 <table>\
@@ -106,7 +118,7 @@ setTimeout(\"location.href = '/'\",10000);\
 <td><input type='text' name='password' value='%s' placeholder='Password of existing network'/></td>\
 </tr>\
 <tr>\
-<td colspan='2'>WPA2 Enterprise settings. Leave blank for regular</td>\
+<td colspan='2'><small><i>WPA2 Enterprise settings. Leave blank for regular</i></small></td>\
 </tr>\
 <tr>\
 <td>Enterprise username</td>\
@@ -120,10 +132,8 @@ setTimeout(\"location.href = '/'\",10000);\
 <td></td>\
 <td><input type='submit' value='Connect' class='ok-button'/></td>\
 </tr>\
-\
 </table>\
 </form>\
-\
 <h2>STA Static IP Settings</h2>\
 <form action='' method='GET'>\
 <table>\
@@ -143,13 +153,11 @@ setTimeout(\"location.href = '/'\",10000);\
 <td></td>\
 <td><input type='submit' value='Connect' class='ok-button'/></td>\
 </tr>\
-\
+<tr>\
+<td colspan='2'><small><i>Leave it in blank if you want your ESP32 to get an IP using DHCP</i></small></td>\
+</tr>\
 </table>\
-<small>\
-<i>Leave it in blank if you want your ESP32 to get an IP using DHCP</i>\
-</small>\
 </form>\
-\
 <h2>Device Management</h2>\
 <form action='' method='GET'>\
 <table>\
@@ -159,6 +167,44 @@ setTimeout(\"location.href = '/'\",10000);\
 </tr>\
 </table>\
 </form>\
+</div>\
+</body>\
+</html>\
+"
+
+#define INFO_PAGE "<html>\
+<head>\
+<title>Info</title>\
+<link rel='stylesheet' type='text/css' href='css' />\
+<meta name='viewport' content='width=device-width, initial-scale=1'>\
+</head>\
+<body>\
+<nav id='topnav'>\
+<a class='nav-link' href='/'>CONFIG</a>\
+<a class='nav-link' href='/info'>STATUS</a>\
+<a class='nav-link' href='/portmapping'>PORTMAPPING</a>\
+</nav>\
+<div id='config'>\
+<h1>ESP32 NAT Router Info</h1>\
+<h2>AP info</h2>\
+<table>\
+<tr>\
+<td>IP</td>\
+<td><input disabled type='text' name='ap_ip' value='%s'/></td>\
+</tr>\
+<tr>\
+<td>Subnet Mask</td>\
+<td><input disabled type='text' name='ap_netmask' value='%s'/></td>\
+</tr>\
+<tr>\
+<td>Gateway</td>\
+<td><input disabled type='text' name='ap_gw' value='%s'/></td>\
+</tr>\
+<tr>\
+<td>DNS Server</td>\
+<td><input disabled type='text' name='ap_dns' value='%s'/></td>\
+</tr>\
+</table>\
 </div>\
 </body>\
 </html>\

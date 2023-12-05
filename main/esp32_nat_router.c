@@ -69,6 +69,8 @@ bool has_static_ip = false;
 esp_ip4_addr_t my_ip;
 esp_ip4_addr_t my_ap_ip;
 
+router_info_t routerinfo;
+
 esp_netif_t* wifiAP;
 esp_netif_t* wifiSTA;
 
@@ -240,20 +242,29 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
     else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP)
     {
         ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
-        ESP_LOGI(TAG, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
+        ESP_LOGI(TAG, "got ip: " IPSTR, IP2STR(&event->ip_info.ip));
         ap_connect = true;
         my_ip = event->ip_info.ip;
+
+        sprintf(routerinfo.sta_ip, IPSTR, IP2STR(&my_ip));
+        sprintf(routerinfo.ap_gw, IPSTR, IP2STR(&event->ip_info.gw));
+        sprintf(routerinfo.sta_netmask, IPSTR, IP2STR(&event->ip_info.netmask));
+
         delete_portmap_tab();
         apply_portmap_tab();
         if (esp_netif_get_dns_info(wifiSTA, ESP_NETIF_DNS_MAIN, &dns) == ESP_OK)
         {
+            sprintf(routerinfo.ap_dns, IPSTR, IP2STR(&dns.ip.u_addr.ip4));
+
             esp_netif_set_dns_info(wifiAP, ESP_NETIF_DNS_MAIN, &dns);
-            ESP_LOGI(TAG, "set dns to:" IPSTR, IP2STR(&(dns.ip.u_addr.ip4)));
+            ESP_LOGI(TAG, "set dns to: " IPSTR, IP2STR(&(dns.ip.u_addr.ip4)));
         }
         xEventGroupSetBits(wifi_event_group, WIFI_CONNECTED_BIT);
     }
     else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_AP_STACONNECTED)
-    {
+    {        
+        wifi_event_ap_staconnected_t* event = (wifi_event_ap_staconnected_t*) event_data;
+        ESP_LOGI(TAG, "%d", event->mac[0]);
         connect_count++;
         ESP_LOGI(TAG,"%d. station connected", connect_count);
     }
@@ -328,7 +339,7 @@ void wifi_init(const char* ssid, const char* ent_username, const char* ent_ident
             .beacon_interval = 100,
         }
     };
-
+    
     strlcpy((char*)ap_config.sta.ssid, ap_ssid, sizeof(ap_config.sta.ssid));
     if (strlen(ap_passwd) < 8) {
         ap_config.ap.authmode = WIFI_AUTH_OPEN;

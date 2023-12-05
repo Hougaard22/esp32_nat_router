@@ -11,7 +11,6 @@
 
 #include "freertos/event_groups.h"
 #include "esp_wifi.h"
-#include "esp_eap_client.h"
 
 #include "lwip/opt.h"
 #include "lwip/err.h"

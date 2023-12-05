@@ -26,6 +26,18 @@ extern char* ap_ssid;
 extern char* ap_passwd;
 extern char* ap_ip;
 
+struct router_info
+{
+   char ap_dns[16];
+   char ap_gw[16];
+   char sta_ip[16];
+   char sta_netmask[16];
+};
+typedef struct router_info router_info_t;
+extern router_info_t routerinfo;
+
+extern esp_netif_t* wifiAP;
+
 extern uint16_t connect_count;
 extern bool ap_connect;
 

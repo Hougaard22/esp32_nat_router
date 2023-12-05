@@ -41,23 +41,6 @@ esp_timer_create_args_t restart_timer_args = {
 /* An HTTP GET handler */
 static esp_err_t index_get_handler(httpd_req_t *req)
 {
-    // struct portmap_table_entry portmap = get_portmap_ref();
-
-    // esp_ip4_addr_t addr;
-    // for (int i = 0; i<sizeof(portmap); i++) {
-    //     ESP_LOGI(TAG,"%d", i);
-    //     if (portmap[i].valid) {
-    //         ESP_LOGI(TAG,"%s", portmap[i].proto == PROTO_TCP?"TCP ":"UDP ");
-            
-    //         addr.addr = my_ip;
-    //         ESP_LOGI(TAG, IPSTR":%lu -> ", IP2STR(&addr), portmap[i].mport);
-    //         ESP_LOGI(TAG,":%lu -> ", portmap[i].mport);
-    //         addr.addr = portmap[i].daddr;
-    //         ESP_LOGI(TAG,IPSTR":%lu\n", IP2STR(&addr), portmap[i].dport);
-    //         ESP_LOGI(TAG,":%lu\n", portmap[i].dport);
-    //     }
-    // }
-    // add_portmap(PROTO_TCP, 9090 + sizeof(portmap), addr.addr, 9090 + sizeof(portmap));
 
     char*  buf;
     size_t buf_len;
@@ -217,6 +200,65 @@ char* html_escape(const char* src) {
     return res;
 }
 
+static esp_err_t info_get_handler(httpd_req_t *req)
+{
+    const char* info_page_template = INFO_PAGE;
+
+    char* safe_ap_ip = html_escape(ap_ip);
+    char* safe_netmask = html_escape(routerinfo.sta_netmask);
+    char* safe_gateway_addr = html_escape(routerinfo.ap_gw);
+    char* safe_ap_dns = html_escape(routerinfo.ap_dns);
+
+    int page_len =
+        strlen(info_page_template) +
+        strlen(safe_netmask) +
+        strlen(safe_ap_ip) +
+        strlen(safe_gateway_addr) +
+        strlen(safe_ap_dns) +
+        256;
+    char* info_page = malloc(sizeof(char) * page_len);
+
+    snprintf(
+        info_page, page_len, info_page_template,
+        safe_ap_ip, safe_netmask, safe_gateway_addr, safe_ap_dns);
+
+    free(safe_ap_ip);
+    free(safe_netmask);
+    free(safe_gateway_addr);
+    free(safe_ap_dns);
+
+    httpd_resp_send(req, info_page, strlen(info_page));
+
+    return ESP_OK;
+}
+
+static httpd_uri_t statusp = {
+    .uri       = "/info",
+    .method    = HTTP_GET,
+    .handler   = info_get_handler,
+};
+
+static esp_err_t css_get_handler(httpd_req_t *req)
+{
+    const char* css_page_template = CSS_PAGE;
+
+    int page_len =
+        strlen(css_page_template) +
+        256;
+    char* css_page = malloc(sizeof(char) * page_len);
+
+    snprintf(css_page, page_len, css_page_template);
+
+    httpd_resp_send(req, css_page, strlen(css_page));
+
+    return ESP_OK;
+}
+
+static httpd_uri_t cssp = {
+    .uri       = "/css",
+    .method    = HTTP_GET,
+    .handler   = css_get_handler,
+};
 
 httpd_handle_t start_webserver(void)
 {
@@ -246,7 +288,7 @@ httpd_handle_t start_webserver(void)
     snprintf(
         config_page, page_len, config_page_template,
         safe_ap_ssid, safe_ap_passwd,
-        safe_ssid, safe_passwd, safe_ent_username, safe_ent_identity,
+        safe_ssid, safe_passwd, safe_ent_username, safe_ent_identity, // safe_sta_ip
             static_ip, subnet_mask, gateway_addr);
     indexp.user_ctx = config_page;
 
@@ -265,6 +307,8 @@ httpd_handle_t start_webserver(void)
         // Set URI handlers
         ESP_LOGI(TAG, "Registering URI handlers");
         httpd_register_uri_handler(server, &indexp);
+        httpd_register_uri_handler(server, &statusp);
+        httpd_register_uri_handler(server, &cssp);
         return server;
     }
 
