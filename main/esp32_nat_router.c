@@ -9,7 +9,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <pthread.h>
 #include "esp_system.h"
 #include "esp_log.h"
 #include "esp_console.h"
@@ -38,13 +37,6 @@
 #include <esp_http_server.h>
 
 #include "router_globals.h"
-
-// On board LED
-#if defined(CONFIG_IDF_TARGET_ESP32S3)
-#define BLINK_GPIO 44
-#else
-#define BLINK_GPIO 2
-#endif
 
 /* FreeRTOS event group to signal when we are connected*/
 static EventGroupHandle_t wifi_event_group;
@@ -194,27 +186,6 @@ static void initialize_console(void)
 #endif
 }
 
-void * led_status_thread(void * p)
-{
-    gpio_reset_pin(BLINK_GPIO);
-    gpio_set_direction(BLINK_GPIO, GPIO_MODE_OUTPUT);
-
-    while (true)
-    {
-        gpio_set_level(BLINK_GPIO, ap_connect);
-
-        for (int i = 0; i < connect_count; i++)
-        {
-            gpio_set_level(BLINK_GPIO, 1 - ap_connect);
-            vTaskDelay(50 / portTICK_PERIOD_MS);
-            gpio_set_level(BLINK_GPIO, ap_connect);
-            vTaskDelay(50 / portTICK_PERIOD_MS);
-        }
-
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
-}
-
 static void wifi_event_handler(void* arg, esp_event_base_t event_base,
                                 int32_t event_id, void* event_data)
 {
@@ -266,7 +237,6 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
 
 const int CONNECTED_BIT = BIT0;
 #define JOIN_TIMEOUT_MS (2000)
-
 
 void wifi_init(const char* ssid, const char* ent_username, const char* ent_identity, const char* passwd, const char* static_ip, const char* subnet_mask, const char* gateway_addr, const char* ap_ssid, const char* ap_passwd, const char* ap_ip)
 {
@@ -463,9 +433,6 @@ void app_main(void)
 
     // Setup WIFI
     wifi_init(ssid, ent_username, ent_identity, passwd, static_ip, subnet_mask, gateway_addr, ap_ssid, ap_passwd, ap_ip);
-
-    pthread_t t1;
-    pthread_create(&t1, NULL, led_status_thread, NULL);
 
     esp_netif_napt_enable(wifiAP);
     ESP_LOGI(TAG, "NAT is enabled");
