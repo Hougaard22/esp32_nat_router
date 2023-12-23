@@ -502,6 +502,7 @@ static int show(int argc, char **argv)
     ip4_addr_t addr;
     addr.addr = my_ap_ip;
     printf("AP IP address: " IPSTR "\n", IP2STR(&addr));
+    printf("AP DNS server: %s\n", ap_dns);
 
     if (ssid != NULL) free(ssid);
     if (ent_username != NULL) free(ent_username);

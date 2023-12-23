@@ -30,18 +30,12 @@
 #include "lwip/opt.h"
 #include "lwip/err.h"
 #include "lwip/sys.h"
-#if !IP_NAPT
-#error "IP_NAPT must be defined"
-#endif
-#include "lwip/lwip_napt.h"
 
 #include "dhcpserver/dhcpserver.h"
 #include "dhcpserver/dhcpserver_options.h"
 
 #include "cmd_decl.h"
 #include <esp_http_server.h>
-
-
 
 #include "router_globals.h"
 
@@ -245,15 +239,11 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
         ap_connect = true;
         my_ip = event->ip_info.ip.addr;
 
-        //sprintf(routerinfo.sta_ip, IPSTR, IP2STR(&my_ip));
-        //sprintf(gateway_addr, IPSTR, IP2STR(&event->ip_info.gw));
-        //sprintf(routerinfo.sta_netmask, IPSTR, IP2STR(&event->ip_info.netmask));
-
         delete_portmap_tab();
         apply_portmap_tab();
         if (esp_netif_get_dns_info(wifiSTA, ESP_NETIF_DNS_MAIN, &dns) == ESP_OK)
         {
-            //sprintf(routerinfo.ap_dns, IPSTR, IP2STR(&dns.ip.u_addr.ip4));
+            asprintf(&ap_dns, IPSTR, IP2STR(&dns.ip.u_addr.ip4));
 
             esp_netif_set_dns_info(wifiAP, ESP_NETIF_DNS_MAIN, &dns);
             ESP_LOGI(TAG, "set dns to: " IPSTR, IP2STR(&(dns.ip.u_addr.ip4)));
@@ -329,7 +319,7 @@ void wifi_init(const char* ssid, const char* ent_username, const char* ent_ident
 
     /* ESP WIFI CONFIG */
     wifi_config_t wifi_config = { 0 };
-        wifi_config_t ap_config = {
+    wifi_config_t ap_config = {
         .ap = {
             .channel = 0,
             .authmode = WIFI_AUTH_WPA2_WPA3_PSK,
@@ -385,8 +375,6 @@ void wifi_init(const char* ssid, const char* ent_username, const char* ent_ident
     dnsserver.ip.u_addr.ip4.addr = esp_ip4addr_aton(DEFAULT_DNS);
     dnsserver.ip.type = ESP_IPADDR_TYPE_V4;
     esp_netif_set_dns_info(wifiAP, ESP_NETIF_DNS_MAIN, &dnsserver);
-
-    // esp_netif_get_dns_info(ESP_IF_WIFI_AP, ESP_NETIF_DNS_MAIN, &dnsinfo);
     // ESP_LOGI(TAG, "DNS IP:" IPSTR, IP2STR(&dnsinfo.ip.u_addr.ip4));
 
     xEventGroupWaitBits(wifi_event_group, CONNECTED_BIT,
@@ -411,6 +399,7 @@ char* gateway_addr = NULL;
 char* ap_ssid = NULL;
 char* ap_passwd = NULL;
 char* ap_ip = NULL;
+char* ap_dns = NULL;
 
 char* param_set_default(const char* def_val) {
     char * retval = malloc(strlen(def_val)+1);
@@ -478,7 +467,7 @@ void app_main(void)
     pthread_t t1;
     pthread_create(&t1, NULL, led_status_thread, NULL);
 
-    ip_napt_enable(my_ap_ip, 1);
+    esp_netif_napt_enable(wifiAP);
     ESP_LOGI(TAG, "NAT is enabled");
 
     char* lock = NULL;
