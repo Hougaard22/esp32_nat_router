@@ -17,7 +17,7 @@
 #include "esp_http_server.h"
 
 #include "pages.h"
-#include "pages/info_page.h"
+
 #include "router_globals.h"
 
 static const char *TAG = "HTTPServer";
@@ -199,28 +199,6 @@ char* html_escape(const char* src) {
     return res;
 }
 
-static esp_err_t css_get_handler(httpd_req_t *req)
-{
-    const char* css_page_template = CSS_PAGE;
-
-    int page_len =
-        strlen(css_page_template) +
-        256;
-    char* css_page = malloc(sizeof(char) * page_len);
-
-    snprintf(css_page, page_len, css_page_template);
-
-    httpd_resp_send(req, css_page, strlen(css_page));
-
-    return ESP_OK;
-}
-
-static httpd_uri_t cssp = {
-    .uri       = "/css",
-    .method    = HTTP_GET,
-    .handler   = css_get_handler,
-};
-
 httpd_handle_t start_webserver(void)
 {
     httpd_handle_t server = NULL;
@@ -268,7 +246,7 @@ httpd_handle_t start_webserver(void)
         // Set URI handlers
         ESP_LOGI(TAG, "Registering URI handlers");
         httpd_register_uri_handler(server, &indexp);
-        //httpd_register_uri_handler(server, &infop);
+        httpd_register_uri_handler(server, &infop);
         httpd_register_uri_handler(server, &cssp);
         return server;
     }

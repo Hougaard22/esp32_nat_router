@@ -1,4 +1,4 @@
-static httpd_uri_t infop;
+extern httpd_uri_t infop;
 
 #define INFO_PAGE "\
 <html>\
