@@ -17,11 +17,11 @@
 #include "freertos/task.h"
 #include "sdkconfig.h"
 #include "nvs.h"
+#include "lwip/ip4_addr.h"
 #include "esp_wifi.h"
 
 #include "router_globals.h"
 #include "cmd_router.h"
-//#include "portmap_table.h"
 
 #ifdef CONFIG_FREERTOS_USE_STATS_FORMATTING_FUNCTIONS
 #define WITH_TASKS_INFO 1
@@ -499,7 +499,9 @@ static int show(int argc, char **argv)
     );
     printf("AP SSID: %s Password: %s\n", ap_ssid != NULL ? ap_ssid : "<undef>",
         ap_passwd != NULL ? ap_passwd : "<undef>");
-    printf("AP IP address: " IPSTR "\n", IP2STR(&my_ap_ip));
+    ip4_addr_t addr;
+    addr.addr = my_ap_ip;
+    printf("AP IP address: " IPSTR "\n", IP2STR(&addr));
 
     if (ssid != NULL) free(ssid);
     if (ent_username != NULL) free(ent_username);
@@ -513,7 +515,8 @@ static int show(int argc, char **argv)
 
     printf("Uplink AP %sconnected\n", ap_connect?"":"not ");
     if (ap_connect) {
-        printf ("IP: " IPSTR "\n", IP2STR(&my_ip));
+        addr.addr = my_ip;
+        printf ("IP: " IPSTR "\n", IP2STR(&addr));
     }
     printf("%d Stations connected\n", connect_count);
 
@@ -542,7 +545,7 @@ void get_connected_clients_list(wifi_sta_list_t stationList, esp_netif_pair_mac_
         }
     }
 
-    esp_netif_dhcps_get_clients_by_mac(wifiAP, stationList.num, mac_ip_pair);
+    esp_netif_dhcps_get_clients_by_mac(esp_netif_get_handle_from_ifkey("WIFI_AP_DEF"), stationList.num, mac_ip_pair);
 }
 
 static int show_connected_clients(int argc, char **argv) {

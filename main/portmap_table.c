@@ -1,46 +1,33 @@
 
-#include <pthread.h>
-#include "esp_system.h"
 #include "esp_log.h"
-#include "esp_vfs_dev.h"
-#include "driver/uart.h"
-#include "linenoise/linenoise.h"
-#include "argtable3/argtable3.h"
-#include "nvs.h"
+#include "esp_netif_ip_addr.h"
 #include "nvs_flash.h"
-
-#include "freertos/event_groups.h"
-#include "esp_wifi.h"
-
-#include "lwip/opt.h"
-#include "lwip/err.h"
 
 #include "cmd_decl.h"
 #include "lwip/ip4_addr.h"
-
-#include "router_globals.h"
-#include "portmap_table.h"
 #if !IP_NAPT
 #error "IP_NAPT must be defined"
 #endif
 #include "lwip/lwip_napt.h"
 
+#include "router_globals.h"
+
 static const char *TAG = "portmap_table";
 
-struct portmap_table_entry {
+typedef struct portmap_table_entry {
   u32_t daddr;
   u16_t mport;
   u16_t dport;
   u8_t proto;
   u8_t valid;
-};
+} portmap_table_entry_t;
 
 struct portmap_table_entry portmap_tab[IP_PORTMAP_MAX];
 
 esp_err_t apply_portmap_tab() {
     for (int i = 0; i<IP_PORTMAP_MAX; i++) {
         if (portmap_tab[i].valid) {
-            ip_portmap_add(portmap_tab[i].proto, my_ip.addr, portmap_tab[i].mport, portmap_tab[i].daddr, portmap_tab[i].dport);
+            ip_portmap_add(portmap_tab[i].proto, my_ip, portmap_tab[i].mport, portmap_tab[i].daddr, portmap_tab[i].dport);
         }
     }
     return ESP_OK;
@@ -58,9 +45,10 @@ esp_err_t delete_portmap_tab() {
 void print_portmap_tab() {
     for (int i = 0; i<IP_PORTMAP_MAX; i++) {
         if (portmap_tab[i].valid) {
+            ip4_addr_t addr;
+            addr.addr = my_ip;
             printf ("%s", portmap_tab[i].proto == PROTO_TCP?"TCP ":"UDP ");
-            printf (IPSTR":%d -> ", IP2STR(&my_ip), portmap_tab[i].mport);
-            esp_ip4_addr_t addr;
+            printf (IPSTR":%d -> ", IP2STR(&addr), portmap_tab[i].mport);
             addr.addr = portmap_tab[i].daddr;
             printf (IPSTR":%d\n", IP2STR(&addr), portmap_tab[i].dport);
         }
@@ -117,7 +105,7 @@ esp_err_t add_portmap(u8_t proto, u16_t mport, u32_t daddr, u16_t dport) {
             }
             nvs_close(nvs);
 
-            ip_portmap_add(proto, my_ip.addr, mport, daddr, dport);
+            ip_portmap_add(proto, my_ip, mport, daddr, dport);
 
             return ESP_OK;
         }

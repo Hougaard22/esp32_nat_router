@@ -13,7 +13,6 @@
 #include <esp_system.h>
 #include <esp_timer.h>
 #include <sys/param.h>
-//#include "nvs_flash.h"
 #include "esp_netif.h"
 
 #include <esp_http_server.h>
@@ -205,9 +204,9 @@ static esp_err_t info_get_handler(httpd_req_t *req)
     const char* info_page_template = INFO_PAGE;
 
     char* safe_ap_ip = html_escape(ap_ip);
-    char* safe_netmask = html_escape(routerinfo.sta_netmask);
-    char* safe_gateway_addr = html_escape(routerinfo.ap_gw);
-    char* safe_ap_dns = html_escape(routerinfo.ap_dns);
+    char* safe_netmask = html_escape(subnet_mask);
+    char* safe_gateway_addr = html_escape(gateway_addr);
+    char* safe_ap_dns = html_escape("routerinfo.ap_dns");
 
     int page_len =
         strlen(info_page_template) +

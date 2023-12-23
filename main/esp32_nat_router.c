@@ -30,6 +30,10 @@
 #include "lwip/opt.h"
 #include "lwip/err.h"
 #include "lwip/sys.h"
+#if !IP_NAPT
+#error "IP_NAPT must be defined"
+#endif
+#include "lwip/lwip_napt.h"
 
 #include "dhcpserver/dhcpserver.h"
 #include "dhcpserver/dhcpserver_options.h"
@@ -37,11 +41,8 @@
 #include "cmd_decl.h"
 #include <esp_http_server.h>
 
-#if !IP_NAPT
-#error "IP_NAPT must be defined"
-#endif
-#include "lwip/lwip_napt.h"
-#include "portmap_table.h"
+
+
 #include "router_globals.h"
 
 // On board LED
@@ -66,10 +67,8 @@ uint16_t connect_count = 0;
 bool ap_connect = false;
 bool has_static_ip = false;
 
-esp_ip4_addr_t my_ip;
-esp_ip4_addr_t my_ap_ip;
-
-router_info_t routerinfo;
+uint32_t my_ip;
+uint32_t my_ap_ip;
 
 esp_netif_t* wifiAP;
 esp_netif_t* wifiSTA;
@@ -244,17 +243,17 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
         ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
         ESP_LOGI(TAG, "got ip: " IPSTR, IP2STR(&event->ip_info.ip));
         ap_connect = true;
-        my_ip = event->ip_info.ip;
+        my_ip = event->ip_info.ip.addr;
 
-        sprintf(routerinfo.sta_ip, IPSTR, IP2STR(&my_ip));
-        sprintf(routerinfo.ap_gw, IPSTR, IP2STR(&event->ip_info.gw));
-        sprintf(routerinfo.sta_netmask, IPSTR, IP2STR(&event->ip_info.netmask));
+        //sprintf(routerinfo.sta_ip, IPSTR, IP2STR(&my_ip));
+        //sprintf(gateway_addr, IPSTR, IP2STR(&event->ip_info.gw));
+        //sprintf(routerinfo.sta_netmask, IPSTR, IP2STR(&event->ip_info.netmask));
 
         delete_portmap_tab();
         apply_portmap_tab();
         if (esp_netif_get_dns_info(wifiSTA, ESP_NETIF_DNS_MAIN, &dns) == ESP_OK)
         {
-            sprintf(routerinfo.ap_dns, IPSTR, IP2STR(&dns.ip.u_addr.ip4));
+            //sprintf(routerinfo.ap_dns, IPSTR, IP2STR(&dns.ip.u_addr.ip4));
 
             esp_netif_set_dns_info(wifiAP, ESP_NETIF_DNS_MAIN, &dns);
             ESP_LOGI(TAG, "set dns to: " IPSTR, IP2STR(&(dns.ip.u_addr.ip4)));
@@ -302,11 +301,11 @@ void wifi_init(const char* ssid, const char* ent_username, const char* ent_ident
         apply_portmap_tab();
     }
 
-    my_ap_ip.addr = esp_ip4addr_aton(ap_ip);
+    my_ap_ip = esp_ip4addr_aton(ap_ip);
 
     esp_netif_ip_info_t ipInfo_ap;
-    ipInfo_ap.ip = my_ap_ip;
-    ipInfo_ap.gw = my_ap_ip;
+    ipInfo_ap.ip.addr = my_ap_ip;
+    ipInfo_ap.gw.addr = my_ap_ip;
     esp_netif_set_ip4_addr(&ipInfo_ap.netmask, 255,255,255,0);
     esp_netif_dhcps_stop(wifiAP); // stop before setting ip WifiAP
     esp_netif_set_ip_info(wifiAP, &ipInfo_ap);
@@ -479,7 +478,7 @@ void app_main(void)
     pthread_t t1;
     pthread_create(&t1, NULL, led_status_thread, NULL);
 
-    ip_napt_enable(my_ap_ip.addr, 1);
+    ip_napt_enable(my_ap_ip, 1);
     ESP_LOGI(TAG, "NAT is enabled");
 
     char* lock = NULL;
