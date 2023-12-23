@@ -205,6 +205,9 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
         ap_connect = true;
         my_ip = event->ip_info.ip.addr;
 
+        asprintf(&gateway_addr, IPSTR, IP2STR(&event->ip_info.gw));
+        asprintf(&subnet_mask, IPSTR, IP2STR(&event->ip_info.netmask));
+
         delete_portmap_tab();
         apply_portmap_tab();
         if (esp_netif_get_dns_info(wifiSTA, ESP_NETIF_DNS_MAIN, &dns) == ESP_OK)
