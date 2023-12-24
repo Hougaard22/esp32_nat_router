@@ -40,8 +40,9 @@ outline: none !important;\
 box-shadow: 0 0 10px #719ECE;\
 }\
 #config {\
-width:400px;\
+max-width:400px;\
 margin:0 auto;\
+width:100%;\
 }\
 .ok-button {\
 background-color: #0078e7;\
@@ -54,7 +55,7 @@ color: #fff;\
 *:disabled {\
 background-color: lightgray;\
 }\
-#topnav {\
+.nav-bar {\
 padding: 0 20 0 20;\
 background-color: #0078e7;\
 text-align: center;\

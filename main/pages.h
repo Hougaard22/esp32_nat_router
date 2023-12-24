@@ -6,7 +6,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 <link rel='stylesheet' type='text/css' href='css'/></head>\
 <body>\
-<nav id='topnav'>\
+<nav class='nav-bar'>\
 <a class='nav-link' href='/'>CONFIG</a>\
 <a class='nav-link' href='/info'>INFO</a>\
 </nav>\

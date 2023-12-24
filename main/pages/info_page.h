@@ -10,7 +10,7 @@ extern httpd_uri_t infop;
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
 </head>\
 <body>\
-<nav id='topnav'>\
+<nav class='nav-bar'>\
 <a class='nav-link' href='/'>CONFIG</a>\
 <a class='nav-link' href='/info'>INFO</a>\
 </nav>\
