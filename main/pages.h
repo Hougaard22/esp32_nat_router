@@ -1,67 +1,9 @@
+#include "pages/css_page.h"
+
 #define CONFIG_PAGE "<html>\
-<head></head>\
+<head><title>esp32_nat_router (Config)</title>\
 <meta name='viewport' content='width=device-width, initial-scale=1'>\
-<style>\
-body {\
-font-family: apercu-pro, -apple-system, system-ui, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;\
-padding: 1em;\
-line-height: 2em;\
-font-weight: 100;\
-}\
-\
-td {\
-font-weight: 100;\
-min-height: 24px;\
-}\
-\
-td:first-child { \
-text-align: right;\
-min-width: 100px;\
-padding-right: 10px;\
-}\
-\
-h1 {\
-font-size: 1.5em;\
-font-weight: 200;\
-}\
-\
-h2 {\
-font-size: 1.2em;\
-font-weight: 200;\
-margin-left: 5px;\
-}\
-\
-input {\
-border: 1px solid rgb(196, 196, 196);\
-color: rgb(76, 76, 76);\
-width: 240px;\
-border-radius: 3px;\
-height: 40px;\
-margin: 3px 0px;\
-padding: 0px 14px;\
-}\
-\
-input:focus {\
-border:1px solid black;\
-outline: none !important;\
-box-shadow: 0 0 10px #719ECE;\
-}\
-\
-#config {\
-width:400px; \
-margin:0 auto;\
-}\
-\
-.ok-button {\
-background-color: #0078e7;\
-color: #fff;\
-}\
-\
-.red-button {\
-background-color: #e72e00;\
-color: #fff;\
-}\
-</style>\
+<link rel='stylesheet' type='text/css' href='css'/></head>\
 <body>\
 <div id='config'>\
 <h1>ESP32 NAT Router Config</h1>\
