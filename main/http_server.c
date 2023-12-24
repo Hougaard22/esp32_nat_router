@@ -247,6 +247,7 @@ httpd_handle_t start_webserver(void)
         ESP_LOGI(TAG, "Registering URI handlers");
         httpd_register_uri_handler(server, &indexp);
         httpd_register_uri_handler(server, &infop);
+        httpd_register_uri_handler(server, &portmapp);
         httpd_register_uri_handler(server, &cssp);
         return server;
     }

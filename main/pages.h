@@ -1,4 +1,5 @@
 #include "pages/info_page.h"
+#include "pages/portmap_page.h"
 #include "pages/css_page.h"
 
 #define CONFIG_PAGE "<html>\
@@ -10,8 +11,8 @@
 <body>\
 <nav id='topnav'>\
 <a class='nav-link' href='/'>CONFIG</a>\
-<a class='nav-link' href='/info'>STATUS</a>\
-<a class='nav-link' href='/portmapping'>PORTMAPPING</a>\
+<a class='nav-link' href='/info'>INFO</a>\
+<a class='nav-link' href='/portmapping'>PORTMAP</a>\
 </nav>\
 <div id='config'>\
 <h1>ESP32 NAT Router Config</h1>\

@@ -10,8 +10,8 @@ extern httpd_uri_t infop;
 <body>\
 <nav id='topnav'>\
 <a class='nav-link' href='/'>CONFIG</a>\
-<a class='nav-link' href='/info'>STATUS</a>\
-<a class='nav-link' href='/portmapping'>PORTMAPPING</a>\
+<a class='nav-link' href='/info'>INFO</a>\
+<a class='nav-link' href='/portmapping'>PORTMAP</a>\
 </nav>\
 <div id='config'>\
 <h1>ESP32 NAT Router Info</h1>\

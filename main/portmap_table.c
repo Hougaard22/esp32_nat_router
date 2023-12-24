@@ -4,25 +4,14 @@
 #include "nvs_flash.h"
 
 #include "cmd_decl.h"
-#include "lwip/ip4_addr.h"
-#if !IP_NAPT
-#error "IP_NAPT must be defined"
-#endif
-#include "lwip/lwip_napt.h"
 
+#include "portmap_table.h"
 #include "router_globals.h"
+
 
 static const char *TAG = "portmap_table";
 
-typedef struct portmap_table_entry {
-  u32_t daddr;
-  u16_t mport;
-  u16_t dport;
-  u8_t proto;
-  u8_t valid;
-} portmap_table_entry_t;
-
-struct portmap_table_entry portmap_tab[IP_PORTMAP_MAX];
+portmap_table_entry_t portmap_tab[IP_PORTMAP_MAX];
 
 esp_err_t apply_portmap_tab() {
     for (int i = 0; i<IP_PORTMAP_MAX; i++) {
