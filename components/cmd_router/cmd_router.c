@@ -23,10 +23,6 @@
 #include "esp_wifi.h"
 
 #include "lwip/ip4_addr.h"
-#if !IP_NAPT
-#error "IP_NAPT must be defined"
-#endif
-#include "lwip/lwip_napt.h"
 
 #include "router_globals.h"
 #include "cmd_router.h"

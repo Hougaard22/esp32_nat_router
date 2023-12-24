@@ -40,6 +40,9 @@ esp_err_t get_config_param_int(char* name, int* param);
 esp_err_t get_config_param_str(char* name, char** param);
 
 void print_portmap_tab();
+esp_err_t get_portmap_tab();
+esp_err_t delete_portmap_tab();
+esp_err_t apply_portmap_tab();
 esp_err_t add_portmap(uint8_t proto, uint16_t mport, uint32_t daddr, uint16_t dport);
 esp_err_t del_portmap(uint8_t proto, uint16_t mport);
 
