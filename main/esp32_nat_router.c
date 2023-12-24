@@ -238,10 +238,16 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
         ESP_LOGI(TAG, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
         ap_connect = true;
         my_ip = event->ip_info.ip.addr;
+
+        asprintf(&gateway_addr, IPSTR, IP2STR(&event->ip_info.gw));
+        asprintf(&subnet_mask, IPSTR, IP2STR(&event->ip_info.netmask));
+
         delete_portmap_tab();
         apply_portmap_tab();
         if (esp_netif_get_dns_info(wifiSTA, ESP_NETIF_DNS_MAIN, &dns) == ESP_OK)
         {
+            asprintf(&ap_dns, IPSTR, IP2STR(&dns.ip.u_addr.ip4));
+
             esp_netif_set_dns_info(wifiAP, ESP_NETIF_DNS_MAIN, &dns);
             ESP_LOGI(TAG, "set dns to:" IPSTR, IP2STR(&(dns.ip.u_addr.ip4)));
         }
@@ -396,6 +402,7 @@ char* gateway_addr = NULL;
 char* ap_ssid = NULL;
 char* ap_passwd = NULL;
 char* ap_ip = NULL;
+char* ap_dns = NULL;
 
 char* param_set_default(const char* def_val) {
     char * retval = malloc(strlen(def_val)+1);

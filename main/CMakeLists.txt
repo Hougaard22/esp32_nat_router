@@ -1,6 +1,7 @@
 idf_component_register(SRCS "esp32_nat_router.c"
                             "http_server.c"
                             "portmap_table.c"
+                            "pages/info_page.c"
                             "pages/css_page.c"
                     INCLUDE_DIRS "."
                             "pages"
