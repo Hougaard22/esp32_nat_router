@@ -13,6 +13,7 @@ extern httpd_uri_t infop;
 <nav class='nav-bar'>\
 <a class='nav-link' href='/'>CONFIG</a>\
 <a class='nav-link' href='/info'>INFO</a>\
+<a class='nav-link' href='/portmap'>PORTMAP</a>\
 </nav>\
 <div id='config'>\
 <h1>ESP32 NAT Router Info</h1>\
@@ -35,6 +36,7 @@ extern httpd_uri_t infop;
 <td><input disabled type='text' name='ap_dns' value='%s'/></td>\
 </tr>\
 </table>\
+<h2>Uptime: %s</h2>\
 </div>\
 </body>\
 </html>\
