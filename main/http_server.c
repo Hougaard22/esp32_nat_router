@@ -250,6 +250,8 @@ httpd_handle_t start_webserver(void)
         httpd_register_uri_handler(server, &indexp);
         httpd_register_uri_handler(server, &infop);
         httpd_register_uri_handler(server, &cssp);
+        // Portmap
+        register_portmap_uri_handlers(server);
         return server;
     }
 

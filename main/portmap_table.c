@@ -10,11 +10,13 @@
 static const char *TAG = "portmap_table";
 
 portmap_table_entry_t portmap_tab[IP_PORTMAP_MAX];
+int portmap_count = 0;
 
 esp_err_t apply_portmap_tab() {
     for (int i = 0; i<IP_PORTMAP_MAX; i++) {
         if (portmap_tab[i].valid) {
             ip_portmap_add(portmap_tab[i].proto, my_ip, portmap_tab[i].mport, portmap_tab[i].daddr, portmap_tab[i].dport);
+            portmap_count++;
         }
     }
     return ESP_OK;
@@ -26,6 +28,7 @@ esp_err_t delete_portmap_tab() {
             ip_portmap_remove(portmap_tab[i].proto, portmap_tab[i].mport);
         }
     }
+    portmap_count = 0;
     return ESP_OK;
 }
 
@@ -93,6 +96,7 @@ esp_err_t add_portmap(u8_t proto, u16_t mport, u32_t daddr, u16_t dport) {
             nvs_close(nvs);
 
             ip_portmap_add(proto, my_ip, mport, daddr, dport);
+            portmap_count++;
 
             return ESP_OK;
         }
@@ -122,6 +126,7 @@ esp_err_t del_portmap(u8_t proto, u16_t mport) {
             nvs_close(nvs);
 
             ip_portmap_remove(proto, mport);
+            portmap_count--;
             return ESP_OK;
         }
     }

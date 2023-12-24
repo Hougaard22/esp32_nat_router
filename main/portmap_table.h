@@ -15,3 +15,4 @@ typedef struct portmap_table_entry {
 } portmap_table_entry_t;
 
 extern portmap_table_entry_t portmap_tab[IP_PORTMAP_MAX];
+extern int portmap_count;

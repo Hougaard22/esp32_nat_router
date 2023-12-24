@@ -28,7 +28,8 @@ padding-top: 5px;\
 input {\
 border: 1px solid rgb(196, 196, 196);\
 color: rgb(76, 76, 76);\
-width: 240px;\
+max-width: 240px;\
+width: 100%;\
 border-radius: 3px;\
 height: 40px;\
 margin: 3px 0px;\
@@ -40,7 +41,7 @@ outline: none !important;\
 box-shadow: 0 0 10px #719ECE;\
 }\
 #config {\
-max-width:400px;\
+max-width:450px;\
 margin:0 auto;\
 width:100%;\
 }\
@@ -66,5 +67,28 @@ display: inline-block;\
 width: 100px;\
 color: White;\
 text-decoration: none;\
+}\
+table {\
+    width: 100%;\
+}\
+table span {\
+    float:left;\
+}\
+input:invalid {\
+  border: red solid 1px;\
+}\
+.form-row {\
+    display: flex;\
+    margin-bottom: 10px;\
+}\
+.form-column {\
+    flex: auto;\
+    padding: 0 10px;\
+}\
+.form-column label, .form-column input, .form-column select {\
+    width: 100%;\
+}\
+.form-column input {\
+    padding: 0px 9px;\
 }\
 "
