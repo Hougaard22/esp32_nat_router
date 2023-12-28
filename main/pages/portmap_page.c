@@ -25,11 +25,11 @@ static esp_err_t portmap_get_handler(httpd_req_t *req)
         page_ptr += sprintf(buf + page_ptr, add_new);
     }
 
-    page_ptr += sprintf(buf + page_ptr, "Current Portmap Rules<br/>");
-
     if (portmap_count > 0) 
     {
-        page_ptr += sprintf(buf + page_ptr, "<table>");
+        page_ptr += sprintf(buf + page_ptr, "Current Portmap Rules<br/><table><thead>\
+                    <tr><th>Proto</th><th>Source</th><th></th><th>Destination</th><th></th></tr>\
+                </thead><tbody>");
         const char* row = portmap_current_row; // row size with data = 162
         ip4_addr_t saddr;
         ip4_addr_t daddr;
@@ -52,7 +52,7 @@ static esp_err_t portmap_get_handler(httpd_req_t *req)
                 page_ptr = 0;
             }
         }
-        page_ptr += sprintf(buf + page_ptr, "</table>");
+        page_ptr += sprintf(buf + page_ptr, "</tbody></table>");
     }
     else 
     {

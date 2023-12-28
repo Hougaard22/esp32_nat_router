@@ -2,93 +2,92 @@
 
 extern httpd_uri_t cssp;
 
-#define CSS_PAGE "html * {\
-font-weight: 100;}\
-body {\
-font-family: system-ui, sans-serif;\
-padding: 0em;\
-margin: 0;\
-line-height: 2em;\
+#define CSS_PAGE "body {\
+    font-weight: 100;\
+    font-family: system-ui, sans-serif;\
+    margin: 0;\
+    line-height: 2em;\
 }\
-td {\
-min-height: 24px;\
-}\
-td:first-child {\
-text-align: right;\
-min-width: 130px;\
-padding-right: 10px;\
-}\
-h1 {\
-font-size: 1.5em;\
-}\
-h2 {\
-font-size: 1.2em;\
-padding-top: 5px;\
-}\
+select,\
 input {\
-border: 1px solid rgb(196, 196, 196);\
-color: rgb(76, 76, 76);\
-max-width: 240px;\
-width: 100%;\
-border-radius: 3px;\
-height: 40px;\
-margin: 3px 0px;\
-padding: 0px 14px;\
+    border: 1px solid rgb(196, 196, 196);\
+    color: rgb(76, 76, 76);\
+    width: 100%;\
+    border-radius: 3px;\
+    height: 40px;\
+    margin: 3px 0px;\
+    padding: 0px 10px;\
 }\
-input:focus {\
-border:1px solid black;\
-outline: none !important;\
-box-shadow: 0 0 10px #719ECE;\
+    input:focus {\
+    border:1px solid black;\
+    outline: none !important;\
+    box-shadow: 0 0 10px #719ECE;\
 }\
-#config {\
-max-width:450px;\
-margin:0 auto;\
-width:100%;\
+#container {\
+    display: flex;\
+    flex-direction: column;\
+    flex-wrap: nowrap;\
+    align-items: center;\
+    width: 100%;\
+}\
+#container div {\
+    display: flex; \
+    flex-direction: column;\
+    min-width: 400px;\
 }\
 .ok-button {\
-background-color: #0078e7;\
-color: #fff;\
+    background-color: #0078e7;\
+    color: #fff;\
 }\
 .red-button {\
-background-color: #e72e00;\
-color: #fff;\
+    background-color: #e72e00;\
+    color: #fff;\
 }\
 *:disabled {\
-background-color: lightgray;\
+    background-color: lightgray;\
 }\
 .nav-bar {\
-padding: 0 20 0 20;\
-background-color: #0078e7;\
-text-align: center;\
-padding: 5px;\
+    padding: 0 20 0 20;\
+    background-color: #0078e7;\
+    text-align: center;\
+    padding: 5px;\
 }\
 .nav-link {\
-display: inline-block;\
-width: 100px;\
-color: White;\
-text-decoration: none;\
+    display: inline-block;\
+    width: 100px;\
+    color: White;\
+    text-decoration: none;\
 }\
 table {\
     width: 100%;\
+    border-collapse: collapse;\
+    margin-top: 10px;\
 }\
-table span {\
-    float:left;\
-}\
-input:invalid {\
-  border: red solid 1px;\
-}\
-.form-row {\
+#info-container {\
     display: flex;\
-    margin-bottom: 10px;\
-}\
-.form-column {\
-    flex: auto;\
-    padding: 0 10px;\
-}\
-.form-column label, .form-column input, .form-column select {\
+    flex-direction: column;\
+    flex-wrap: nowrap;\
+    align-items: center;\
     width: 100%;\
 }\
-.form-column input {\
-    padding: 0px 9px;\
+#info-container div {\
+    min-width: 400px;\
 }\
-"
+.info-row {\
+    display: flex;\
+    align-items: center;\
+    padding: 8px;\
+    background-color: #c0c0c0;\
+}\
+.info-row:nth-child(even) {\
+    background-color: #e0e0e0;\
+}\
+.info-label {\
+    font-weight: bold;\
+    width: 30%;\
+}\
+.info-value {\
+    margin-right: 10px;\
+    flex-grow: 1;\
+    text-align: right;\
+}"

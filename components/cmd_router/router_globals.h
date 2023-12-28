@@ -26,6 +26,7 @@ extern char* ap_ssid;
 extern char* ap_passwd;
 extern char* ap_ip;
 extern char* ap_dns;
+extern char* sta_ip;
 
 extern uint16_t connect_count;
 extern bool ap_connect;

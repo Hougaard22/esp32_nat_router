@@ -28,10 +28,15 @@ static esp_err_t info_get_handler(httpd_req_t *req)
     char* uptime_str = malloc(sizeof(char) * 50);
     format_time(uptime_str, sizeof(uptime_str));
 
+    
+
     int page_len =
         strlen(info_page_template) +
-        strlen(subnet_mask) +
+        strlen(ap_ssid) +
         strlen(ap_ip) +
+        strlen(ssid) +
+        strlen(sta_ip) +
+        strlen(subnet_mask) +
         strlen(gateway_addr) +
         strlen(ap_dns) +
         strlen(uptime_str) +
@@ -40,7 +45,7 @@ static esp_err_t info_get_handler(httpd_req_t *req)
 
     snprintf(
         info_page, page_len, info_page_template,
-        ap_ip, subnet_mask, gateway_addr, ap_dns, uptime_str);
+        ap_ssid, ap_ip, ssid, sta_ip, subnet_mask, gateway_addr, ap_dns, uptime_str);
 
     httpd_resp_send(req, info_page, strlen(info_page));
 

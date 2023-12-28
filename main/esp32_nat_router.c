@@ -239,6 +239,7 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
         ap_connect = true;
         my_ip = event->ip_info.ip.addr;
 
+        asprintf(&sta_ip, IPSTR, IP2STR(&event->ip_info.ip));
         asprintf(&gateway_addr, IPSTR, IP2STR(&event->ip_info.gw));
         asprintf(&subnet_mask, IPSTR, IP2STR(&event->ip_info.netmask));
 
@@ -403,6 +404,7 @@ char* ap_ssid = NULL;
 char* ap_passwd = NULL;
 char* ap_ip = NULL;
 char* ap_dns = NULL;
+char* sta_ip = NULL;
 
 char* param_set_default(const char* def_val) {
     char * retval = malloc(strlen(def_val)+1);

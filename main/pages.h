@@ -3,115 +3,119 @@
 #include "pages/css_page.h"
 
 #define CONFIG_PAGE "<html>\
-<head><title>esp32_nat_router (Config)</title>\
-<meta name='viewport' content='width=device-width, initial-scale=1'>\
-<link rel='stylesheet' type='text/css' href='css'/></head>\
-<body>\
-<nav class='nav-bar'>\
-<a class='nav-link' href='/'>CONFIG</a>\
-<a class='nav-link' href='/info'>INFO</a>\
-<a class='nav-link' href='/portmap'>PORTMAP</a>\
-</nav>\
-<div id='config'>\
-<h1>ESP32 NAT Router Config</h1>\
-<script>\
-if (window.location.search.substr(1) != '')\
-{\
-document.getElementById('config').display = 'none';\
-document.body.innerHTML ='<h1>ESP32 NAT Router Config</h1>The new settings have been sent to the device.<br/>The page will refresh soon automatically...';\
-setTimeout(\"location.href = '/'\",10000);\
-}\
-</script>\
-<h2>AP Settings (the new network)</h2>\
-<form action='' method='GET'>\
-<table>\
-<tr>\
-<td>SSID</td>\
-<td><input type='text' name='ap_ssid' value='%s' placeholder='SSID of the new network'/></td>\
-</tr>\
-<tr>\
-<td>Password</td>\
-<td><input type='text' name='ap_password' value='%s' placeholder='Password of the new network'/></td>\
-</tr>\
-<tr>\
-<td></td>\
-<td><input type='submit' value='Set' class='ok-button'/></td>\
-</tr>\
-</table>\
-<small>\
-<i>Password </i>less than 8 chars = open<br />\
-</small>\
-</form>\
-\
-<h2>STA Settings (uplink WiFi network)</h2>\
-<form action='' method='GET'>\
-<table>\
-<tr>\
-<td>SSID</td>\
-<td><input type='text' name='ssid' value='%s' placeholder='SSID of existing network'/></td>\
-</tr>\
-<tr>\
-<td>Password</td>\
-<td><input type='text' name='password' value='%s' placeholder='Password of existing network'/></td>\
-</tr>\
-<tr>\
-<td colspan='2'>WPA2 Enterprise settings. Leave blank for regular</td>\
-</tr>\
-<tr>\
-<td>Enterprise username</td>\
-<td><input type='text' name='ent_username' value='%s' placeholder='WPA2 Enterprise username'/></td>\
-</tr>\
-<tr>\
-<td>Enterprise identity</td>\
-<td><input type='text' name='ent_identity' value='%s' placeholder='WPA2 Enterprise identity'/></td>\
-</tr>\
-<tr>\
-<td></td>\
-<td><input type='submit' value='Connect' class='ok-button'/></td>\
-</tr>\
-\
-</table>\
-</form>\
-\
-<h2>STA Static IP Settings</h2>\
-<form action='' method='GET'>\
-<table>\
-<tr>\
-<td>Static IP</td>\
-<td><input type='text' name='staticip' value='%s'/></td>\
-</tr>\
-<tr>\
-<td>Subnet Mask</td>\
-<td><input type='text' name='subnetmask' value='%s'/></td>\
-</tr>\
-<tr>\
-<td>Gateway</td>\
-<td><input type='text' name='gateway' value='%s'/></td>\
-</tr>\
-<tr>\
-<td></td>\
-<td><input type='submit' value='Connect' class='ok-button'/></td>\
-</tr>\
-\
-</table>\
-<small>\
-<i>Leave it in blank if you want your ESP32 to get an IP using DHCP</i>\
-</small>\
-</form>\
-\
-<h2>Device Management</h2>\
-<form action='' method='GET'>\
-<table>\
-<tr>\
-<td>Device</td>\
-<td><input type='submit' name='reset' value='Reboot' class='red-button'/></td>\
-</tr>\
-</table>\
-</form>\
-</div>\
-</body>\
-</html>\
-"
+	<head>\
+		<title>esp32_nat_router (Config)</title>\
+		<meta name='viewport' content='width=device-width, initial-scale=1'>\
+		<link rel='stylesheet' type='text/css' href='css'/>\
+		<script>\
+		if (window.location.search.substr(1) != '')\
+		{\
+		document.getElementById('config').display = 'none';\
+		document.body.innerHTML ='<h1>ESP32 NAT Router Config</h1>The new settings have been sent to the device.<br/>The page will refresh soon automatically...';\
+		setTimeout(\"location.href = '/'\",10000);\
+		}\
+		</script>\
+	</head>\
+	<body>\
+		<nav class='nav-bar'>\
+            <a class='nav-link' href='/'>CONFIG</a>\
+            <a class='nav-link' href='/info'>INFO</a>\
+            <a class='nav-link' href='/portmap'>PORTMAP</a>\
+		</nav>\
+		<div id='container'>\
+			<h1>ESP32 NAT Router Config</h1>\
+			<div>\
+				<h2>AP Settings (the new network)</h2>\
+				<form action='' method='GET'>\
+					<table>\
+						<tr>\
+							<td>SSID</td>\
+							<td><input type='text' name='ap_ssid' value='%s' placeholder='SSID of the new network'/></td>\
+						</tr>\
+						<tr>\
+							<td>Password</td>\
+							<td><input type='text' name='ap_password' value='%s' placeholder='Password of the new network'/></td>\
+						</tr>\
+						<tr>\
+							<td></td>\
+							<td><input type='submit' value='Set' class='ok-button'/></td>\
+						</tr>\
+					</table>\
+					<small>\
+					<i>Password </i>less than 8 chars = open<br />\
+					</small>\
+				</form>\
+			</div>\
+			<div>\
+				<h2>STA Settings (uplink WiFi network)</h2>\
+				<form action='' method='GET'>\
+					<table>\
+						<tr>\
+							<td>SSID</td>\
+							<td><input type='text' name='ssid' value='%s' placeholder='SSID of existing network'/></td>\
+						</tr>\
+						<tr>\
+							<td>Password</td>\
+							<td><input type='text' name='password' value='%s' placeholder='Password of existing network'/></td>\
+						</tr>\
+						<tr>\
+							<td colspan='2'><small><i>WPA2 Enterprise settings. Leave blank for regular</i></small></td>\
+						</tr>\
+						<tr>\
+							<td>Enterprise username</td>\
+							<td><input type='text' name='ent_username' value='%s' placeholder='WPA2 Enterprise username'/></td>\
+						</tr>\
+						<tr>\
+							<td>Enterprise identity</td>\
+							<td><input type='text' name='ent_identity' value='%s' placeholder='WPA2 Enterprise identity'/></td>\
+						</tr>\
+						<tr>\
+							<td></td>\
+							<td><input type='submit' value='Connect' class='ok-button'/></td>\
+						</tr>\
+					</table>\
+				</form>\
+			</div>\
+			<div>\
+				<h2>STA Static IP Settings</h2>\
+				<form action='' method='GET'>\
+					<table>\
+						<tr>\
+							<td>Static IP</td>\
+							<td><input type='text' name='staticip' value='%s'/></td>\
+						</tr>\
+						<tr>\
+							<td>Subnet Mask</td>\
+							<td><input type='text' name='subnetmask' value='%s'/></td>\
+						</tr>\
+						<tr>\
+							<td>Gateway</td>\
+							<td><input type='text' name='gateway' value='%s'/></td>\
+						</tr>\
+						<tr>\
+							<td></td>\
+							<td><input type='submit' value='Set' class='ok-button'/></td>\
+						</tr>\
+					</table>\
+					<small>\
+					<i>Leave it in blank for getting IP using DHCP</i>\
+					</small>\
+				</form>\
+			</div>\
+			<div>\
+				<h2>Device Management</h2>\
+				<form action='' method='GET'>\
+					<table>\
+						<tr>\
+							<td>Device</td>\
+							<td><input type='submit' name='reset' value='Reboot' class='red-button'/></td>\
+						</tr>\
+					</table>\
+				</form>\
+			</div>\
+		</div>\
+	</body>\
+</html>"
 
 #define LOCK_PAGE "<html>\
 <head></head>\
