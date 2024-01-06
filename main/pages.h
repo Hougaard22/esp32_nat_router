@@ -7,14 +7,6 @@
 		<title>esp32_nat_router (Config)</title>\
 		<meta name='viewport' content='width=device-width, initial-scale=1'>\
 		<link rel='stylesheet' type='text/css' href='css'/>\
-		<script>\
-		if (window.location.search.substr(1) != '')\
-		{\
-		document.getElementById('config').display = 'none';\
-		document.body.innerHTML ='<h1>ESP32 NAT Router Config</h1>The new settings have been sent to the device.<br/>The page will refresh soon automatically...';\
-		setTimeout(\"location.href = '/'\",10000);\
-		}\
-		</script>\
 	</head>\
 	<body>\
 		<nav class='nav-bar'>\
@@ -114,6 +106,14 @@
 				</form>\
 			</div>\
 		</div>\
+		<script>\
+		if (window.location.search.substr(1) != '')\
+		{\
+		document.getElementsByClassName('nav-bar')[0].style.display = 'none';\
+		document.body.innerHTML ='<center><h1>ESP32 NAT Router Config</h1>The new settings have been sent to the device.<br/>The page will refresh soon automatically...</center>';\
+		setTimeout(\"location.href = '/'\",10000);\
+		}\
+		</script>\
 	</body>\
 </html>"
 
