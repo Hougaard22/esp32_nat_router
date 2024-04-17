@@ -601,8 +601,8 @@ void app_main(void)
     // Setup WIFI
     wifi_init(mac, ssid, ent_username, ent_identity, passwd, static_ip, subnet_mask, gateway_addr, ap_mac, ap_ssid, ap_passwd, ap_ip);
 
-    pthread_t t1;
-    pthread_create(&t1, NULL, led_status_thread, NULL);
+    // pthread_t t1;
+    // pthread_create(&t1, NULL, led_status_thread, NULL);
 
     ip_napt_enable(my_ap_ip, 1);
     ESP_LOGI(TAG, "NAT is enabled");

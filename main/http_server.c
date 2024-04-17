@@ -162,6 +162,23 @@ static httpd_uri_t indexp = {
     .handler   = index_get_handler,
 };
 
+static esp_err_t css_get_handler(httpd_req_t *req)
+{
+    const char* css_page_template = CSS;
+
+    httpd_resp_set_hdr(req, "Cache-Control", "max-age=3600");
+    httpd_resp_set_type(req, "text/css");
+    httpd_resp_send(req, css_page_template, strlen(css_page_template));
+
+    return ESP_OK;
+}
+
+static httpd_uri_t cssp = {
+    .uri       = "/style.css",
+    .method    = HTTP_GET,
+    .handler   = css_get_handler,
+};
+
 esp_err_t http_404_error_handler(httpd_req_t *req, httpd_err_code_t err)
 {
     httpd_resp_send_err(req, HTTPD_404_NOT_FOUND, "Page not found");
@@ -248,6 +265,7 @@ httpd_handle_t start_webserver(void)
         // Set URI handlers
         ESP_LOGI(TAG, "Registering URI handlers");
         httpd_register_uri_handler(server, &indexp);
+        httpd_register_uri_handler(server, &cssp);
         return server;
     }
 
